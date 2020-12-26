@@ -1,5 +1,6 @@
 ﻿namespace GuildHub.Data.Models
 {
+    using System;
     using System.ComponentModel.DataAnnotations.Schema;
 
     public class UserTrophy
@@ -13,5 +14,7 @@
         public int TrophyId { get; set; }
 
         public virtual Trophy Trophy { get; set; }
+
+        public DateTime AwardedOn { get; set; }
     }
 }

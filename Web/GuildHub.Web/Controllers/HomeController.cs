@@ -2,15 +2,28 @@
 {
     using System.Diagnostics;
 
+    using GuildHub.Services.Data;
     using GuildHub.Web.ViewModels;
 
     using Microsoft.AspNetCore.Mvc;
 
     public class HomeController : BaseController
     {
+        private IGetHomeInfoCounts getHomeInfoCounts;
+        private readonly IGetOngoingEventsService getOngoingEventsService;
+
+        public HomeController(
+            IGetHomeInfoCounts getHomeInfoCounts,
+            IGetOngoingEventsService getOngoingEventsService)
+        {
+            this.getHomeInfoCounts = getHomeInfoCounts;
+            this.getOngoingEventsService = getOngoingEventsService;
+        }
+
         public IActionResult Index()
         {
-            return this.View();
+            var viewModel = this.getHomeInfoCounts.GetCounts();
+            return this.View(viewModel);
         }
 
         public IActionResult Privacy()

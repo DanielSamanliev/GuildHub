@@ -21,6 +21,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Data\GuildHub.Data.Common\GuildHub.Data.Common.csproj" />
     <ProjectReference Include="..\..\Data\GuildHub.Data.Models\GuildHub.Data.Models.csproj" />
+    <ProjectReference Include="..\..\Web\GuildHub.Web.ViewModels\GuildHub.Web.ViewModels.csproj" />
     <ProjectReference Include="..\GuildHub.Services.Mapping\GuildHub.Services.Mapping.csproj" />
   </ItemGroup>
 

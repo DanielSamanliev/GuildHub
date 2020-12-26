@@ -428,6 +428,9 @@ namespace GuildHub.Data.Migrations
                     b.Property<int>("TrophyId")
                         .HasColumnType("int");
 
+                    b.Property<DateTime>("AwardedOn")
+                        .HasColumnType("datetime2");
+
                     b.HasKey("GuildId", "TrophyId");
 
                     b.HasIndex("TrophyId");
@@ -610,6 +613,9 @@ namespace GuildHub.Data.Migrations
 
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("AwardedOn")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("TrophyId", "UserId");
 
