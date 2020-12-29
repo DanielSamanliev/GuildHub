@@ -16,6 +16,7 @@
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http;
+    using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
@@ -37,7 +38,13 @@
             services.AddDbContext<ApplicationDbContext>(
                 options => options.UseSqlServer(this.configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddDefaultIdentity<ApplicationUser>(IdentityOptionsProvider.GetIdentityOptions)
+            services.AddDefaultIdentity<ApplicationUser>(options =>
+            {
+                options.SignIn.RequireConfirmedAccount = false;
+                options.Password.RequireDigit = true;
+                options.Lockout.MaxFailedAccessAttempts = 5;
+                options.Lockout.DefaultLockoutTimeSpan = new System.TimeSpan(3);
+            })
                 .AddRoles<ApplicationRole>().AddEntityFrameworkStores<ApplicationDbContext>();
 
             services.Configure<CookiePolicyOptions>(
@@ -65,7 +72,9 @@
             services.AddTransient<IEmailSender, NullMessageSender>();
             services.AddTransient<ISettingsService, SettingsService>();
             services.AddTransient<IGetHomeInfoCounts, GetHomeInfoCounts>();
-            services.AddTransient<IGetOngoingEventsService, GetOngoingEventsService>();
+            services.AddTransient<IGetOngoingEventsServiceAsync, GetOngoingEventsAsync>();
+            services.AddTransient<IGamesService, GamesService>();
+            services.AddTransient<IGuildService, GuildsService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

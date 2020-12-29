@@ -1,0 +1,31 @@
+﻿@model GuildHub.Web.ViewModels.Guild.CreateGuildInputModel
+@{
+    ViewData["Title"] = "Create Guild";
+    var gamesItems = this.Model.GamesKeyValue.Select(x => new SelectListItem(x.Key, x.Value));
+}
+
+<h1>@this.ViewData["Title"]</h1>
+<form method="post" class="col-md-6 offset-3">
+    <div asp-validation-summary="All"></div>
+
+    <div class="form-group">
+        <label asp-for="Name"></label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Description"></label>
+        <textarea asp-for="Description" class="form-control"></textarea>
+    </div>
+    <div class="form-group" id="GameContainer">
+        <label asp-for="GameId"></label>
+        <select asp-for="GameId" class="form-control" asp-items="gamesItems"></select>
+        <span asp-validation-for="GameId" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary offset-11">Create</button>
+</form>
+
+
+
+
+

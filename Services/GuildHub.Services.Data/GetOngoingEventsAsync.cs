@@ -3,45 +3,43 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading.Tasks;
 
     using GuildHub.Data.Common.Repositories;
     using GuildHub.Data.Models;
     using GuildHub.Data.Models.Enums;
+    using Microsoft.AspNetCore.Identity;
 
-    public class GetOngoingEventsService : IGetOngoingEventsService
+    public class GetOngoingEventsAsync : IGetOngoingEventsServiceAsync
     {
         private IDeletableEntityRepository<Event> eventsRepsitory;
         private IDeletableEntityRepository<Guild> guildsRepository;
         private IDeletableEntityRepository<ApplicationUser> usersRepository;
         private IRepository<UserGuild> usersGuildsRepository;
         private IRepository<GuildAlly> alliesRepository;
-        //private string userId;
 
-        public GetOngoingEventsService(
+        public GetOngoingEventsAsync(
             IDeletableEntityRepository<Event> eventsRepository,
             IDeletableEntityRepository<Guild> guildsRepository,
             IDeletableEntityRepository<ApplicationUser> usersRepository,
             IRepository<UserGuild> usersGuildsRepository,
-            IRepository<GuildAlly> alliesRepository
-            //string userId
-            )
+            IRepository<GuildAlly> alliesRepository)
         {
             this.eventsRepsitory = eventsRepository;
             this.guildsRepository = guildsRepository;
             this.usersGuildsRepository = usersGuildsRepository;
             this.usersRepository = usersRepository;
             this.alliesRepository = alliesRepository;
-            //this.userId = userId;
         }
 
-        public ICollection<Event> GetOngoingEvents()
+        public async Task<ICollection<Event>> GetOngoingEvents()
         {
             throw new NotImplementedException();
 
-            //var publicEvents = this.eventsRepsitory.AllAsNoTracking().Where(x => x.Privacy == EventPrivacy.Public).ToList();
-            ////var guildEvents = this.eventsRepsitory.AllAsNoTracking().Where(x => x.Guild.GuildMembers.FirstOrDefault(u => u.UserId == this.userId) != null).ToList();
-            //return guildEvents.Union(publicEvents).ToList();
-            //// TODO: Add Allied Guilds Events
+            //var events = new List<Event>();
+            //eventsRepsitory.AllAsNoTracking()
+            //    .Where(x => x.Guild.GuildMembers.Any(x => x.UserId == this.userId))
+            //    .Where(x => x.Guild.Allies.Where(g => g.GuildTwo.GuildMembers.Any(u => u.UserId == this.userId) || g.GuildTwo.GuildMembers.Any(u => u.UserId == this.userId)));
         }
     }
 }

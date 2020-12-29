@@ -10,11 +10,11 @@
     public class HomeController : BaseController
     {
         private IGetHomeInfoCounts getHomeInfoCounts;
-        private readonly IGetOngoingEventsService getOngoingEventsService;
+        private readonly IGetOngoingEventsServiceAsync getOngoingEventsService;
 
         public HomeController(
             IGetHomeInfoCounts getHomeInfoCounts,
-            IGetOngoingEventsService getOngoingEventsService)
+            IGetOngoingEventsServiceAsync getOngoingEventsService)
         {
             this.getHomeInfoCounts = getHomeInfoCounts;
             this.getOngoingEventsService = getOngoingEventsService;
