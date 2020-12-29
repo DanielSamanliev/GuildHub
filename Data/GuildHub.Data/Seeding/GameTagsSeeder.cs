@@ -10,20 +10,20 @@
     {
         public async Task SeedAsync(ApplicationDbContext dbContext, IServiceProvider serviceProvider)
         {
-            if (dbContext.GTags.Any())
+            if (dbContext.Tags.Any())
             {
                 return;
             }
 
-            await dbContext.GTags.AddAsync(new GTag { Name = "MMORPG" }); // 1
-            await dbContext.GTags.AddAsync(new GTag { Name = "MOBA" }); // 2
-            await dbContext.GTags.AddAsync(new GTag { Name = "RPG" }); // 3
-            await dbContext.GTags.AddAsync(new GTag { Name = "MMO" }); // 4
-            await dbContext.GTags.AddAsync(new GTag { Name = "FPS" }); // 5
-            await dbContext.GTags.AddAsync(new GTag { Name = "PvE" }); // 6
-            await dbContext.GTags.AddAsync(new GTag { Name = "PvP" }); // 7
-            await dbContext.GTags.AddAsync(new GTag { Name = "Fantasy" }); // 8
-            await dbContext.GTags.AddAsync(new GTag { Name = "Sci-Fi" }); // 9
+            await dbContext.Tags.AddAsync(new Tag { Name = "MMORPG", Type = Models.Enums.TagType.Game }); // 1
+            await dbContext.Tags.AddAsync(new Tag { Name = "MOBA", Type = Models.Enums.TagType.Game }); // 2
+            await dbContext.Tags.AddAsync(new Tag { Name = "RPG", Type = Models.Enums.TagType.Game }); // 3
+            await dbContext.Tags.AddAsync(new Tag { Name = "MMO", Type = Models.Enums.TagType.Game }); // 4
+            await dbContext.Tags.AddAsync(new Tag { Name = "FPS", Type = Models.Enums.TagType.Game }); // 5
+            await dbContext.Tags.AddAsync(new Tag { Name = "PvE", Type = Models.Enums.TagType.Both }); // 6
+            await dbContext.Tags.AddAsync(new Tag { Name = "PvP", Type = Models.Enums.TagType.Both }); // 7
+            await dbContext.Tags.AddAsync(new Tag { Name = "Fantasy", Type = Models.Enums.TagType.Game }); // 8
+            await dbContext.Tags.AddAsync(new Tag { Name = "Sci-Fi", Type = Models.Enums.TagType.Game }); // 9
 
             await dbContext.SaveChangesAsync();
         }

@@ -21,7 +21,7 @@
 
         public virtual Image GameIcon { get; set; }
 
-        public virtual ICollection<GameGTag> GameTags { get; set; }
+        public virtual ICollection<GameTag> GameTags { get; set; }
 
         public virtual ICollection<Guild> Guilds { get; set; }
     }

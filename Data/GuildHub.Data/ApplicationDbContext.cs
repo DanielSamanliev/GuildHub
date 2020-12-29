@@ -34,9 +34,9 @@
 
         public DbSet<Game> Games { get; set; }
 
-        public DbSet<GameGTag> GamesGTags { get; set; }
+        public DbSet<GameTag> GamesTags { get; set; }
 
-        public DbSet<GTag> GTags { get; set; }
+        public DbSet<Tag> Tags { get; set; }
 
         public DbSet<Guild> Guilds { get; set; }
 
@@ -59,6 +59,8 @@
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
 
         public DbSet<ApplicationRole> ApplicationRoles { get; set; }
+
+        public DbSet<GuildTag> GuildsTags { get; set; }
 
         public DbSet<Setting> Settings { get; set; }
 
@@ -86,8 +88,8 @@
             builder.Entity<EventUser>()
                 .HasKey(x => new { x.EventId, x.UserId });
 
-            builder.Entity<GameGTag>()
-                .HasKey(x => new { x.GameId, x.GTagId });
+            builder.Entity<GameTag>()
+                .HasKey(x => new { x.GameId, x.TagId });
 
             builder.Entity<GuildAlly>()
                 .HasKey(x => new { x.GuildOneId, x.GuildTwoId });
@@ -106,6 +108,9 @@
 
             builder.Entity<Guild>()
                 .HasMany(x => x.Allies).WithOne(x => x.GuildTwo);
+
+            builder.Entity<GuildTag>()
+                .HasKey(x => new { x.GuildId, x.TagId });
 
             // Needed for Identity models configuration
             base.OnModelCreating(builder);

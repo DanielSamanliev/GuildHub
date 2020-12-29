@@ -5,8 +5,13 @@
     using System.Linq;
     using System.Threading.Tasks;
 
-    public class GuildController
-    {
+    using Microsoft.AspNetCore.Mvc;
 
+    public class GuildController : BaseController
+    {
+        public IActionResult Create()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
