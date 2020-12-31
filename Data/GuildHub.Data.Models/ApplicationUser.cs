@@ -17,6 +17,9 @@ namespace GuildHub.Data.Models
             this.Roles = new HashSet<IdentityUserRole<string>>();
             this.Claims = new HashSet<IdentityUserClaim<string>>();
             this.Logins = new HashSet<IdentityUserLogin<string>>();
+            this.Guilds = new HashSet<UserGuild>();
+            this.Games = new HashSet<UserGame>();
+            this.Trophies = new HashSet<UserTrophy>();
         }
 
         // Audit info
@@ -34,5 +37,11 @@ namespace GuildHub.Data.Models
         public virtual ICollection<IdentityUserClaim<string>> Claims { get; set; }
 
         public virtual ICollection<IdentityUserLogin<string>> Logins { get; set; }
+
+        public virtual ICollection<UserGuild> Guilds { get; set; }
+
+        public virtual ICollection<UserTrophy> Trophies { get; set; }
+
+        public virtual ICollection<UserGame> Games { get; set; }
     }
 }
