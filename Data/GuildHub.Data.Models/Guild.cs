@@ -17,6 +17,7 @@
             this.Trophies = new HashSet<GuildTrophy>();
             this.GuildApiKey = Guid.NewGuid().ToString();
             this.Tags = new HashSet<GuildTag>();
+            this.Applicants = new HashSet<GuildApplication>();
         }
 
         [Required]
@@ -48,5 +49,7 @@
         public virtual ICollection<GuildTrophy> Trophies { get; set; }
 
         public virtual ICollection<GuildTag> Tags { get; set; }
+
+        public virtual ICollection<GuildApplication> Applicants { get; set; }
     }
 }

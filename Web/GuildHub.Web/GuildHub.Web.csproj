@@ -36,4 +36,8 @@
     <ProjectReference Include="..\GuildHub.Web.Infrastructure\GuildHub.Web.Infrastructure.csproj" />
     <ProjectReference Include="..\GuildHub.Web.ViewModels\GuildHub.Web.ViewModels.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\images\" />
+  </ItemGroup>
 </Project>

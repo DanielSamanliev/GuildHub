@@ -14,9 +14,11 @@
         public string Description { get; set; }
 
         [Required]
+        [Display(Name = "Game")]
         public int GameId { get; set; }
 
         public IEnumerable<KeyValuePair<string, string>> GamesKeyValue { get; set; }
 
+        public bool Private { get; set; }
     }
 }

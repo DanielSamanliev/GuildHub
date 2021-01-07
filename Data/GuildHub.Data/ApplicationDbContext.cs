@@ -67,6 +67,8 @@
         // For saving user usernames in each game
         public DbSet<UserGame> UsersGames { get; set; }
 
+        public DbSet<GuildApplication> GuildApplications { get; set; }
+
         public override int SaveChanges() => this.SaveChanges(true);
 
         public override int SaveChanges(bool acceptAllChangesOnSuccess)
@@ -117,6 +119,9 @@
 
             builder.Entity<UserGame>()
                 .HasKey(x => new { x.UserId, x.GameId });
+
+            builder.Entity<GuildApplication>()
+                .HasKey(x => new { x.UserId, x.GuildId });
 
             // Needed for Identity models configuration
             base.OnModelCreating(builder);

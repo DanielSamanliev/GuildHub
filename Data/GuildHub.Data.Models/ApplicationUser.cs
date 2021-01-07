@@ -20,6 +20,7 @@ namespace GuildHub.Data.Models
             this.Guilds = new HashSet<UserGuild>();
             this.Games = new HashSet<UserGame>();
             this.Trophies = new HashSet<UserTrophy>();
+            this.Applications = new HashSet<GuildApplication>();
         }
 
         // Audit info
@@ -43,5 +44,7 @@ namespace GuildHub.Data.Models
         public virtual ICollection<UserTrophy> Trophies { get; set; }
 
         public virtual ICollection<UserGame> Games { get; set; }
+
+        public virtual ICollection<GuildApplication> Applications { get; set; }
     }
 }

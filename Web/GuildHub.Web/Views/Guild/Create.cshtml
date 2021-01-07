@@ -22,8 +22,14 @@
         <select asp-for="GameId" class="form-control" asp-items="gamesItems"></select>
         <span asp-validation-for="GameId" class="text-danger"></span>
     </div>
+    <div class="form-group">
+        <label asp-for="Private"></label>
+        <input asp-for="Private" />
+    </div>
+
     <button type="submit" class="btn btn-primary offset-11">Create</button>
 </form>
+
 
 
 

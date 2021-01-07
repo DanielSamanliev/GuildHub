@@ -1,5 +1,6 @@
 ﻿namespace GuildHub.Services.Data
 {
+    using System.Collections.Generic;
     using System.Threading.Tasks;
 
     using GuildHub.Data.Models;
@@ -8,5 +9,7 @@
     public interface IGuildService
     {
         Task CreateAsync(CreateGuildInputModel input, string userId);
+
+        ICollection<Guild> GetGuilds(string userId);
     }
 }

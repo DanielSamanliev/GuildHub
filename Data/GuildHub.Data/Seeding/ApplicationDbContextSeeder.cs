@@ -29,6 +29,7 @@
                               new SettingsSeeder(),
                               new GameTagsSeeder(),
                               new GamesSeeder(),
+                              new ImagesSeeder(),
                           };
 
             foreach (var seeder in seeders)

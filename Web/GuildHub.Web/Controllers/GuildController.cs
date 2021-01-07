@@ -28,6 +28,7 @@
             this.userManager = userManager;
         }
 
+        [Authorize]
         public IActionResult Create()
         {
             var viewModel = new CreateGuildInputModel();
@@ -50,6 +51,15 @@
             await this.guildService.CreateAsync(input, user.Id);
 
             return this.Redirect("/");
+        }
+
+        public async Task<IActionResult> GuildsList()
+        {
+            var user = await this.userManager.GetUserAsync(this.User);
+
+            var guilds = new ListGuildsViewModel { Guilds = this.guildService.GetGuilds(user.Id) };
+
+            return this.View(guilds);
         }
     }
 }
