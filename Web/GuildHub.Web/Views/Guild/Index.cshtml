@@ -1,0 +1,74 @@
+﻿@model GuildHub.Web.ViewModels.Guild.GuildIndexModel
+@{ 
+    ViewData["Title"] = "Guilds";
+}
+
+<h1 class="text-center">@this.ViewData["Title"]</h1>
+<div>
+    @if (Model.UserGuilds.Count > 0)
+    {
+        <ul aria-label="Your Guilds" style="font-size:45px" class="list-group">
+
+            @foreach (var guild in Model.UserGuilds)
+            {
+                <li><p style="font-size:20px">@guild.GuildName</p></li>
+                <li><h4>@guild.GuildDecription</h4></li>
+                <li></li>
+                <li>
+                    <form method="post" id="ApplicationContainer">
+                        <input type="hidden" name="guildId" value="@guild.GuildId" />
+                        <input type="hidden" name="guildName" value="@guild.GuildName" />
+                    </form>
+                </li>
+            }
+        </ul>
+    }
+    <ul aria-label="Public Guilds" class="list-group">
+        @foreach (var guild in Model.PublicGuilds)
+        {
+            <li><h2>@guild.GuildName</h2></li>
+            <li><h4>@guild.GuildDecription</h4></li>
+            <li>
+                <form method="post" id="ApplicationContainer">
+                    <input type="hidden" name="guildId" value="@guild.GuildId" />
+                    <input type="hidden" name="guildName" value="@guild.GuildName" />
+                    <a class="btn btn-dark offset-11" onclick="AddInputTextField()">Apply</a>
+                </form>
+            </li>
+        }
+    </ul>
+</div>
+
+@section Scripts {
+    <script>
+        function AddInputTextField() {
+            RemoveInputTextField();
+
+            let button = document.createElement("button");
+            button.setAttribute("type", "submit");
+            button.innerText = "Submit";
+            
+            let textArea = document.createElement("textarea");
+            textArea.setAttribute("class", "form-control");
+            textArea.setAttribute("name", "appMessage");
+
+            let label = document.createElement("label");
+            label.innerText = "Application Message";
+
+            event.srcElement.parentNode.appendChild(label);
+            event.srcElement.parentNode.appendChild(textArea);
+            event.srcElement.parentNode.appendChild(button);
+        }
+
+        function RemoveInputTextField() {
+            var guilds = document.querySelectorAll('#ApplicationContainer');
+            guilds.forEach(g => {
+                if (g.lastChild.innerText == "Submit") {
+                    for (var i = 0; i < 3; i++) {
+                        g.removeChild(g.lastChild)
+                    }
+                }
+            })
+        }
+    </script>
+}

@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GuildHub.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20201225163207_InitialEntityCommit")]
+    [Migration("20210108200655_InitialEntityCommit")]
     partial class InitialEntityCommit
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -116,9 +116,6 @@ namespace GuildHub.Data.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<string>("ProfilePictureId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
@@ -140,8 +137,6 @@ namespace GuildHub.Data.Migrations
                         .IsUnique()
                         .HasName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
-
-                    b.HasIndex("ProfilePictureId");
 
                     b.ToTable("AspNetUsers");
                 });
@@ -270,36 +265,6 @@ namespace GuildHub.Data.Migrations
                     b.ToTable("ForumPosts");
                 });
 
-            modelBuilder.Entity("GuildHub.Data.Models.GTag", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("DeletedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("ModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("IsDeleted");
-
-                    b.ToTable("GTags");
-                });
-
             modelBuilder.Entity("GuildHub.Data.Models.Game", b =>
                 {
                     b.Property<int>("Id")
@@ -342,19 +307,19 @@ namespace GuildHub.Data.Migrations
                     b.ToTable("Games");
                 });
 
-            modelBuilder.Entity("GuildHub.Data.Models.GameGTag", b =>
+            modelBuilder.Entity("GuildHub.Data.Models.GameTag", b =>
                 {
                     b.Property<int>("GameId")
                         .HasColumnType("int");
 
-                    b.Property<int>("GTagId")
+                    b.Property<int>("TagId")
                         .HasColumnType("int");
 
-                    b.HasKey("GameId", "GTagId");
+                    b.HasKey("GameId", "TagId");
 
-                    b.HasIndex("GTagId");
+                    b.HasIndex("TagId");
 
-                    b.ToTable("GamesGTags");
+                    b.ToTable("GamesTags");
                 });
 
             modelBuilder.Entity("GuildHub.Data.Models.Guild", b =>
@@ -422,6 +387,42 @@ namespace GuildHub.Data.Migrations
                     b.ToTable("GuildsAllies");
                 });
 
+            modelBuilder.Entity("GuildHub.Data.Models.GuildApplication", b =>
+                {
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("GuildId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Message")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.HasKey("UserId", "GuildId");
+
+                    b.HasIndex("GuildId");
+
+                    b.ToTable("GuildApplications");
+                });
+
+            modelBuilder.Entity("GuildHub.Data.Models.GuildTag", b =>
+                {
+                    b.Property<int>("GuildId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TagId")
+                        .HasColumnType("int");
+
+                    b.HasKey("GuildId", "TagId");
+
+                    b.HasIndex("TagId");
+
+                    b.ToTable("GuildsTags");
+                });
+
             modelBuilder.Entity("GuildHub.Data.Models.GuildTrophy", b =>
                 {
                     b.Property<int>("GuildId")
@@ -429,6 +430,9 @@ namespace GuildHub.Data.Migrations
 
                     b.Property<int>("TrophyId")
                         .HasColumnType("int");
+
+                    b.Property<DateTime>("AwardedOn")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("GuildId", "TrophyId");
 
@@ -542,6 +546,39 @@ namespace GuildHub.Data.Migrations
                     b.ToTable("Settings");
                 });
 
+            modelBuilder.Entity("GuildHub.Data.Models.Tag", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IsDeleted");
+
+                    b.ToTable("Tags");
+                });
+
             modelBuilder.Entity("GuildHub.Data.Models.Trophy", b =>
                 {
                     b.Property<int>("Id")
@@ -584,6 +621,24 @@ namespace GuildHub.Data.Migrations
                     b.ToTable("Trophies");
                 });
 
+            modelBuilder.Entity("GuildHub.Data.Models.UserGame", b =>
+                {
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("GameId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Username")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("UserId", "GameId");
+
+                    b.HasIndex("GameId");
+
+                    b.ToTable("UsersGames");
+                });
+
             modelBuilder.Entity("GuildHub.Data.Models.UserGuild", b =>
                 {
                     b.Property<int>("GuildId")
@@ -612,6 +667,9 @@ namespace GuildHub.Data.Migrations
 
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("AwardedOn")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("TrophyId", "UserId");
 
@@ -724,13 +782,6 @@ namespace GuildHub.Data.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("GuildHub.Data.Models.ApplicationUser", b =>
-                {
-                    b.HasOne("GuildHub.Data.Models.Image", "ProfilePicture")
-                        .WithMany()
-                        .HasForeignKey("ProfilePictureId");
-                });
-
             modelBuilder.Entity("GuildHub.Data.Models.Comment", b =>
                 {
                     b.HasOne("GuildHub.Data.Models.ForumPost", "ForumPost")
@@ -786,17 +837,17 @@ namespace GuildHub.Data.Migrations
                         .HasForeignKey("ImageId");
                 });
 
-            modelBuilder.Entity("GuildHub.Data.Models.GameGTag", b =>
+            modelBuilder.Entity("GuildHub.Data.Models.GameTag", b =>
                 {
-                    b.HasOne("GuildHub.Data.Models.GTag", "Tag")
-                        .WithMany("Games")
-                        .HasForeignKey("GTagId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.HasOne("GuildHub.Data.Models.Game", "Game")
                         .WithMany("GameTags")
                         .HasForeignKey("GameId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("GuildHub.Data.Models.Tag", "Tag")
+                        .WithMany("Games")
+                        .HasForeignKey("TagId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
@@ -825,6 +876,36 @@ namespace GuildHub.Data.Migrations
                     b.HasOne("GuildHub.Data.Models.Guild", "GuildTwo")
                         .WithMany("Allies")
                         .HasForeignKey("GuildTwoId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("GuildHub.Data.Models.GuildApplication", b =>
+                {
+                    b.HasOne("GuildHub.Data.Models.Guild", "Guild")
+                        .WithMany("Applicants")
+                        .HasForeignKey("GuildId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("GuildHub.Data.Models.ApplicationUser", "User")
+                        .WithMany("Applications")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("GuildHub.Data.Models.GuildTag", b =>
+                {
+                    b.HasOne("GuildHub.Data.Models.Guild", "Guild")
+                        .WithMany("Tags")
+                        .HasForeignKey("GuildId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("GuildHub.Data.Models.Tag", "Tag")
+                        .WithMany("Guilds")
+                        .HasForeignKey("TagId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
@@ -868,6 +949,21 @@ namespace GuildHub.Data.Migrations
                     b.HasOne("GuildHub.Data.Models.Image", "TrophyIcon")
                         .WithMany()
                         .HasForeignKey("ImageId");
+                });
+
+            modelBuilder.Entity("GuildHub.Data.Models.UserGame", b =>
+                {
+                    b.HasOne("GuildHub.Data.Models.Game", "Game")
+                        .WithMany()
+                        .HasForeignKey("GameId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("GuildHub.Data.Models.ApplicationUser", "User")
+                        .WithMany("Games")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("GuildHub.Data.Models.UserGuild", b =>

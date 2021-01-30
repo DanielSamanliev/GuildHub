@@ -17,14 +17,18 @@
     {
         private IDeletableEntityRepository<Guild> guildRepo;
         private IDeletableEntityRepository<Image> imagesRepo;
+        private IRepository<GuildApplication> applicsRepo;
 
         public GuildsService(
             IDeletableEntityRepository<Guild> guildRepo,
-            IDeletableEntityRepository<Image> imagesRepo)
+            IDeletableEntityRepository<Image> imagesRepo,
+            IRepository<GuildApplication> applicsRepo)
         {
             this.guildRepo = guildRepo;
             this.imagesRepo = imagesRepo;
+            this.applicsRepo = applicsRepo;
         }
+
         public async Task CreateAsync(CreateGuildInputModel input, string userId)
         {
             var guild = new Guild()
@@ -33,7 +37,7 @@
                 Description = input.Description,
                 GameId = input.GameId,
             };
-            guild.GuildMembers.Add(new UserGuild() { UserId = userId, MemberType = GuildHub.Data.Models.Enums.MemberType.Leader });
+            guild.GuildMembers.Add(new UserGuild() { UserId = userId, MemberType = MemberType.Leader });
             if (input.Private)
             {
                 guild.Privacy = GuildPrivacy.Private;
@@ -43,39 +47,76 @@
                 guild.Privacy = GuildPrivacy.Public;
             }
 
-            guild.GuildCrest = this.imagesRepo.AllAsNoTracking().FirstOrDefault(x => x.Id == "DefaultGuildIcon");
-
             await this.guildRepo.AddAsync(guild);
             await this.guildRepo.SaveChangesAsync();
         }
 
-        public ICollection<Guild> GetGuilds(string userId)
+        public ICollection<ListGuildInfo> GetUserGuilds(string userId)
         {
-            //var userGuilds = this.guildRepo.AllAsNoTracking()
-            //    .Where(x => x.GuildMembers.Any(gm => gm.UserId == userId))
-            //    .Select(x => new ListGuildInfo
-            //    {
-            //        GuildName = x.Name,
-            //        MembersCount = x.GuildMembers.Count(),
-            //        TrophiesCount = x.Trophies.Count(),
-            //        GuildDecription = x.Description,
-            //        GuidCrest = new ImageViewModel { Path = $"{x.GuildCrest.Id}.{x.GuildCrest.Extension}" },
-            //        Game = new GameViewModel { Name = x.Game.Name },
-            //        UserMemberType = x.GuildMembers.FirstOrDefault(gm => gm.UserId == userId).MemberType,
-            //    }).ToList();
+            var guilds = new List<ListGuildInfo>();
 
-            List<Guild> guilds = new List<Guild>();
-
-            if (userId != null)
+            if (userId == null)
             {
-                guilds.AddRange(this.guildRepo.AllAsNoTracking()
-                .Where(x => x.GuildMembers.Any(gm => gm.UserId == userId))
-                .ToList());
+                return new List<ListGuildInfo>();
             }
 
-            guilds.Union(this.guildRepo.AllAsNoTracking().Where(x => x.Privacy == 0).ToList());
+            var userGuilds = this.guildRepo.AllAsNoTracking()
+                .Where(x => x.GuildMembers.Any(gm => gm.UserId == userId))
+                .Take(25)
+                .Select(x => new ListGuildInfo
+                {
+                    GuildName = x.Name,
+                    MembersCount = x.GuildMembers.Count(),
+                    TrophiesCount = x.Trophies.Count(),
+                    GuildDecription = x.Description,
+                    GuidCrest = new ImageViewModel { Path = $"{x.GuildCrest.Id}.{x.GuildCrest.Extension}" },
+                    Game = new GameViewModel { Name = x.Game.Name },
+                    UserMemberType = x.GuildMembers.FirstOrDefault(gm => gm.UserId == userId).MemberType,
+                    Tags = x.Tags.Select(t => new TagViewModel { Name = t.Tag.Name }).ToList(),
+                }).ToList();
 
-            return guilds;
+
+            return userGuilds;
+        }
+
+        public ICollection<ListGuildInfo> GetPublicGuilds()
+        {
+            var publicGuilds = this.guildRepo.AllAsNoTracking()
+                .Where(x => x.Privacy == GuildPrivacy.Public)
+                .Take(25)
+                .Select(x => new ListGuildInfo
+                {
+                    GuildName = x.Name,
+                    MembersCount = x.GuildMembers.Count(),
+                    TrophiesCount = x.Trophies.Count(),
+                    GuildDecription = x.Description,
+                    GuidCrest = new ImageViewModel { Path = $"{x.GuildCrest.Id}.{x.GuildCrest.Extension}" },
+                    Game = new GameViewModel { Name = x.Game.Name },
+                    Tags = x.Tags.Select(t => new TagViewModel { Name = t.Tag.Name }).ToList(),
+                }).ToList();
+
+            return publicGuilds;
+        }
+
+        public async Task ApplyForGuildAsync(GuildApplicationInputModel input)
+        {
+            if (this.applicsRepo.AllAsNoTracking().Any(x => x.UserId == input.UserId || x.GuildId == input.GuildId))
+            {
+                return;
+            }
+
+            var guild = this.guildRepo.AllAsNoTracking().FirstOrDefault(x => x.Id == input.GuildId);
+
+            var application = new GuildApplication()
+            {
+                UserId = input.UserId,
+                GuildId = input.GuildId,
+                Message = input.Message,
+                Status = GuildAppStatus.Pending,
+            };
+
+            await this.applicsRepo.AddAsync(application);
+            await this.applicsRepo.SaveChangesAsync();
         }
     }
 }

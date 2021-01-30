@@ -53,13 +53,49 @@
             return this.Redirect("/");
         }
 
-        public async Task<IActionResult> GuildsList()
+        public async Task<IActionResult> Index()
         {
             var user = await this.userManager.GetUserAsync(this.User);
 
-            var guilds = new ListGuildsViewModel { Guilds = this.guildService.GetGuilds(user.Id) };
+            var model = new GuildIndexModel();
 
-            return this.View(guilds);
+            model.UserGuilds = this.guildService.GetUserGuilds(user.Id);
+            model.PublicGuilds = this.guildService.GetPublicGuilds();
+
+            return this.View(model);
         }
+
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> Index(GuildApplicationInputModel input)
+        {
+            var user = await this.userManager.GetUserAsync(this.User);
+
+            input.UserId = user.Id;
+            input.GuildName = this.Request.Form["guildName"];
+            input.GuildId = int.Parse(this.Request.Form["guildId"]);
+            input.Message = this.Request.Form["appMessage"];
+
+            return this.RedirectToAction("Apply", input);
+        }
+
+
+        public IActionResult Apply()
+        {
+            return this.View();
+        }
+
+        
+
+        //[Authorize]
+        //[HttpPost]
+        //public async Task<IActionResult> Apply()
+        //{
+        //    var user = await this.userManager.GetUserAsync(this.User);
+
+        //    input.UserId = user.Id;
+
+        //    return this.View(input);
+        //}
     }
 }

@@ -10,6 +10,8 @@
     {
         Task CreateAsync(CreateGuildInputModel input, string userId);
 
-        ICollection<Guild> GetGuilds(string userId);
+        ICollection<ListGuildInfo> GetUserGuilds(string userId);
+
+        ICollection<ListGuildInfo> GetPublicGuilds();
     }
 }

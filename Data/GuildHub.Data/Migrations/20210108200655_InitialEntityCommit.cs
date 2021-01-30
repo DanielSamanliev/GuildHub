@@ -1,8 +1,8 @@
-﻿namespace GuildHub.Data.Migrations
-{
-    using System;
-    using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
+namespace GuildHub.Data.Migrations
+{
     public partial class InitialEntityCommit : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -26,20 +26,32 @@
                 });
 
             migrationBuilder.CreateTable(
-                name: "GTags",
+                name: "AspNetUsers",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<string>(nullable: false),
+                    UserName = table.Column<string>(maxLength: 256, nullable: true),
+                    NormalizedUserName = table.Column<string>(maxLength: 256, nullable: true),
+                    Email = table.Column<string>(maxLength: 256, nullable: true),
+                    NormalizedEmail = table.Column<string>(maxLength: 256, nullable: true),
+                    EmailConfirmed = table.Column<bool>(nullable: false),
+                    PasswordHash = table.Column<string>(nullable: true),
+                    SecurityStamp = table.Column<string>(nullable: true),
+                    ConcurrencyStamp = table.Column<string>(nullable: true),
+                    PhoneNumber = table.Column<string>(nullable: true),
+                    PhoneNumberConfirmed = table.Column<bool>(nullable: false),
+                    TwoFactorEnabled = table.Column<bool>(nullable: false),
+                    LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
+                    LockoutEnabled = table.Column<bool>(nullable: false),
+                    AccessFailedCount = table.Column<int>(nullable: false),
                     CreatedOn = table.Column<DateTime>(nullable: false),
                     ModifiedOn = table.Column<DateTime>(nullable: true),
                     IsDeleted = table.Column<bool>(nullable: false),
-                    DeletedOn = table.Column<DateTime>(nullable: true),
-                    Name = table.Column<string>(nullable: false),
+                    DeletedOn = table.Column<DateTime>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_GTags", x => x.Id);
+                    table.PrimaryKey("PK_AspNetUsers", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -93,6 +105,24 @@
                 });
 
             migrationBuilder.CreateTable(
+                name: "Tags",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CreatedOn = table.Column<DateTime>(nullable: false),
+                    ModifiedOn = table.Column<DateTime>(nullable: true),
+                    IsDeleted = table.Column<bool>(nullable: false),
+                    DeletedOn = table.Column<DateTime>(nullable: true),
+                    Name = table.Column<string>(nullable: false),
+                    Type = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Tags", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
@@ -109,94 +139,6 @@
                         name: "FK_AspNetRoleClaims_AspNetRoles_RoleId",
                         column: x => x.RoleId,
                         principalTable: "AspNetRoles",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "AspNetUsers",
-                columns: table => new
-                {
-                    Id = table.Column<string>(nullable: false),
-                    UserName = table.Column<string>(maxLength: 256, nullable: true),
-                    NormalizedUserName = table.Column<string>(maxLength: 256, nullable: true),
-                    Email = table.Column<string>(maxLength: 256, nullable: true),
-                    NormalizedEmail = table.Column<string>(maxLength: 256, nullable: true),
-                    EmailConfirmed = table.Column<bool>(nullable: false),
-                    PasswordHash = table.Column<string>(nullable: true),
-                    SecurityStamp = table.Column<string>(nullable: true),
-                    ConcurrencyStamp = table.Column<string>(nullable: true),
-                    PhoneNumber = table.Column<string>(nullable: true),
-                    PhoneNumberConfirmed = table.Column<bool>(nullable: false),
-                    TwoFactorEnabled = table.Column<bool>(nullable: false),
-                    LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
-                    LockoutEnabled = table.Column<bool>(nullable: false),
-                    AccessFailedCount = table.Column<int>(nullable: false),
-                    CreatedOn = table.Column<DateTime>(nullable: false),
-                    ModifiedOn = table.Column<DateTime>(nullable: true),
-                    IsDeleted = table.Column<bool>(nullable: false),
-                    DeletedOn = table.Column<DateTime>(nullable: true),
-                    ProfilePictureId = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AspNetUsers", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_AspNetUsers_Images_ProfilePictureId",
-                        column: x => x.ProfilePictureId,
-                        principalTable: "Images",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Games",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    CreatedOn = table.Column<DateTime>(nullable: false),
-                    ModifiedOn = table.Column<DateTime>(nullable: true),
-                    IsDeleted = table.Column<bool>(nullable: false),
-                    DeletedOn = table.Column<DateTime>(nullable: true),
-                    Name = table.Column<string>(nullable: false),
-                    Description = table.Column<string>(nullable: false),
-                    Website = table.Column<string>(nullable: true),
-                    ImageId = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Games", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Games_Images_ImageId",
-                        column: x => x.ImageId,
-                        principalTable: "Images",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Trophies",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    CreatedOn = table.Column<DateTime>(nullable: false),
-                    ModifiedOn = table.Column<DateTime>(nullable: true),
-                    IsDeleted = table.Column<bool>(nullable: false),
-                    DeletedOn = table.Column<DateTime>(nullable: true),
-                    Name = table.Column<string>(nullable: false),
-                    TrophyType = table.Column<int>(nullable: false),
-                    Description = table.Column<string>(nullable: false),
-                    ImageId = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Trophies", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Trophies_Images_ImageId",
-                        column: x => x.ImageId,
-                        principalTable: "Images",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -287,6 +229,58 @@
                 });
 
             migrationBuilder.CreateTable(
+                name: "Games",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CreatedOn = table.Column<DateTime>(nullable: false),
+                    ModifiedOn = table.Column<DateTime>(nullable: true),
+                    IsDeleted = table.Column<bool>(nullable: false),
+                    DeletedOn = table.Column<DateTime>(nullable: true),
+                    Name = table.Column<string>(nullable: false),
+                    Description = table.Column<string>(nullable: false),
+                    Website = table.Column<string>(nullable: true),
+                    ImageId = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Games", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Games_Images_ImageId",
+                        column: x => x.ImageId,
+                        principalTable: "Images",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Trophies",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CreatedOn = table.Column<DateTime>(nullable: false),
+                    ModifiedOn = table.Column<DateTime>(nullable: true),
+                    IsDeleted = table.Column<bool>(nullable: false),
+                    DeletedOn = table.Column<DateTime>(nullable: true),
+                    Name = table.Column<string>(nullable: false),
+                    TrophyType = table.Column<int>(nullable: false),
+                    Description = table.Column<string>(nullable: false),
+                    ImageId = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Trophies", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Trophies_Images_ImageId",
+                        column: x => x.ImageId,
+                        principalTable: "Images",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ForumPosts",
                 columns: table => new
                 {
@@ -316,25 +310,25 @@
                 });
 
             migrationBuilder.CreateTable(
-                name: "GamesGTags",
+                name: "GamesTags",
                 columns: table => new
                 {
                     GameId = table.Column<int>(nullable: false),
-                    GTagId = table.Column<int>(nullable: false)
+                    TagId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_GamesGTags", x => new { x.GameId, x.GTagId });
+                    table.PrimaryKey("PK_GamesTags", x => new { x.GameId, x.TagId });
                     table.ForeignKey(
-                        name: "FK_GamesGTags_GTags_GTagId",
-                        column: x => x.GTagId,
-                        principalTable: "GTags",
+                        name: "FK_GamesTags_Games_GameId",
+                        column: x => x.GameId,
+                        principalTable: "Games",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_GamesGTags_Games_GameId",
-                        column: x => x.GameId,
-                        principalTable: "Games",
+                        name: "FK_GamesTags_Tags_TagId",
+                        column: x => x.TagId,
+                        principalTable: "Tags",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -374,11 +368,37 @@
                 });
 
             migrationBuilder.CreateTable(
+                name: "UsersGames",
+                columns: table => new
+                {
+                    UserId = table.Column<string>(nullable: false),
+                    GameId = table.Column<int>(nullable: false),
+                    Username = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UsersGames", x => new { x.UserId, x.GameId });
+                    table.ForeignKey(
+                        name: "FK_UsersGames_Games_GameId",
+                        column: x => x.GameId,
+                        principalTable: "Games",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_UsersGames_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "UsersTrophies",
                 columns: table => new
                 {
                     UserId = table.Column<string>(nullable: false),
-                    TrophyId = table.Column<int>(nullable: false)
+                    TrophyId = table.Column<int>(nullable: false),
+                    AwardedOn = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -454,6 +474,32 @@
                 });
 
             migrationBuilder.CreateTable(
+                name: "GuildApplications",
+                columns: table => new
+                {
+                    UserId = table.Column<string>(nullable: false),
+                    GuildId = table.Column<int>(nullable: false),
+                    Status = table.Column<int>(nullable: false),
+                    Message = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_GuildApplications", x => new { x.UserId, x.GuildId });
+                    table.ForeignKey(
+                        name: "FK_GuildApplications_Guilds_GuildId",
+                        column: x => x.GuildId,
+                        principalTable: "Guilds",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_GuildApplications_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "GuildsAllies",
                 columns: table => new
                 {
@@ -478,11 +524,36 @@
                 });
 
             migrationBuilder.CreateTable(
+                name: "GuildsTags",
+                columns: table => new
+                {
+                    GuildId = table.Column<int>(nullable: false),
+                    TagId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_GuildsTags", x => new { x.GuildId, x.TagId });
+                    table.ForeignKey(
+                        name: "FK_GuildsTags_Guilds_GuildId",
+                        column: x => x.GuildId,
+                        principalTable: "Guilds",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_GuildsTags_Tags_TagId",
+                        column: x => x.TagId,
+                        principalTable: "Tags",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "GuildsTrophies",
                 columns: table => new
                 {
                     GuildId = table.Column<int>(nullable: false),
-                    TrophyId = table.Column<int>(nullable: false)
+                    TrophyId = table.Column<int>(nullable: false),
+                    AwardedOn = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -632,11 +703,6 @@
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_AspNetUsers_ProfilePictureId",
-                table: "AspNetUsers",
-                column: "ProfilePictureId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Comments_ForumPostId",
                 table: "Comments",
                 column: "ForumPostId");
@@ -682,14 +748,14 @@
                 column: "IsDeleted");
 
             migrationBuilder.CreateIndex(
-                name: "IX_GamesGTags_GTagId",
-                table: "GamesGTags",
-                column: "GTagId");
+                name: "IX_GamesTags_TagId",
+                table: "GamesTags",
+                column: "TagId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_GTags_IsDeleted",
-                table: "GTags",
-                column: "IsDeleted");
+                name: "IX_GuildApplications_GuildId",
+                table: "GuildApplications",
+                column: "GuildId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Guilds_GameId",
@@ -710,6 +776,11 @@
                 name: "IX_GuildsAllies_GuildTwoId",
                 table: "GuildsAllies",
                 column: "GuildTwoId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_GuildsTags_TagId",
+                table: "GuildsTags",
+                column: "TagId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_GuildsTrophies_TrophyId",
@@ -742,6 +813,11 @@
                 column: "IsDeleted");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Tags_IsDeleted",
+                table: "Tags",
+                column: "IsDeleted");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Trophies_ImageId",
                 table: "Trophies",
                 column: "ImageId");
@@ -750,6 +826,11 @@
                 name: "IX_Trophies_IsDeleted",
                 table: "Trophies",
                 column: "IsDeleted");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UsersGames_GameId",
+                table: "UsersGames",
+                column: "GameId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_UsersGuilds_UserId",
@@ -783,10 +864,16 @@
                 name: "EventsUsers");
 
             migrationBuilder.DropTable(
-                name: "GamesGTags");
+                name: "GamesTags");
+
+            migrationBuilder.DropTable(
+                name: "GuildApplications");
 
             migrationBuilder.DropTable(
                 name: "GuildsAllies");
+
+            migrationBuilder.DropTable(
+                name: "GuildsTags");
 
             migrationBuilder.DropTable(
                 name: "GuildsTrophies");
@@ -796,6 +883,9 @@
 
             migrationBuilder.DropTable(
                 name: "Settings");
+
+            migrationBuilder.DropTable(
+                name: "UsersGames");
 
             migrationBuilder.DropTable(
                 name: "UsersGuilds");
@@ -810,7 +900,7 @@
                 name: "Events");
 
             migrationBuilder.DropTable(
-                name: "GTags");
+                name: "Tags");
 
             migrationBuilder.DropTable(
                 name: "Comments");
