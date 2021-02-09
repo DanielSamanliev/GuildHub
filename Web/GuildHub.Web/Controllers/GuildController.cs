@@ -50,52 +50,39 @@
 
             await this.guildService.CreateAsync(input, user.Id);
 
-            return this.Redirect("/");
+            return this.Redirect("All");
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> All()
         {
             var user = await this.userManager.GetUserAsync(this.User);
 
             var model = new GuildIndexModel();
 
-            model.UserGuilds = this.guildService.GetUserGuilds(user.Id);
+            if (user != null)
+            {
+                model.UserGuilds = this.guildService.GetUserGuilds(user.Id);
+            }
+
             model.PublicGuilds = this.guildService.GetPublicGuilds();
 
             return this.View(model);
         }
 
-        [Authorize]
-        [HttpPost]
-        public async Task<IActionResult> Index(GuildApplicationInputModel input)
+        public IActionResult ById(int id)
         {
+            var guild = this.guildService.GetById<SingleGuildViewModel>(id);
+
+            return this.View(guild);
+        }
+
+        public async Task<IActionResult> Apply(int id)
+        {
+            var guild = this.guildService.GetById<GuildApplicationInputModel>(id);
             var user = await this.userManager.GetUserAsync(this.User);
+            guild.UserId = user.Id;
 
-            input.UserId = user.Id;
-            input.GuildName = this.Request.Form["guildName"];
-            input.GuildId = int.Parse(this.Request.Form["guildId"]);
-            input.Message = this.Request.Form["appMessage"];
-
-            return this.RedirectToAction("Apply", input);
+            return this.View(guild);
         }
-
-
-        public IActionResult Apply()
-        {
-            return this.View();
-        }
-
-        
-
-        //[Authorize]
-        //[HttpPost]
-        //public async Task<IActionResult> Apply()
-        //{
-        //    var user = await this.userManager.GetUserAsync(this.User);
-
-        //    input.UserId = user.Id;
-
-        //    return this.View(input);
-        //}
     }
 }

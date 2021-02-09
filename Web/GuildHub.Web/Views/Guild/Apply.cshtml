@@ -1,11 +1,8 @@
-﻿@{
-    ViewData["Title"] = $"Application For {Model.GuildName}";
+﻿@model GuildHub.Web.ViewModels.Guild.GuildApplicationInputModel
+@{ 
+    ViewData["Title"] = Model.Name;
 }
-
-<head>
-    <title>URLData</title>
-</head>
-<body>
-    Customer ID: @UrlData[0].ToString()
-</body>
+<h1 class="text-center">Applying for @Model.Name</h1>
+<input asp-for="ApplicationTemplate" />
+<button type="submit">Apply</button>
 

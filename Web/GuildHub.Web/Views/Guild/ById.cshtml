@@ -1,0 +1,16 @@
+﻿@using GuildHub.Common;
+@model GuildHub.Web.ViewModels.Guild.SingleGuildViewModel
+@{ 
+    this.ViewData["Title"] = Model.Name;
+}
+
+<h1 class="text-center">@Model.Name</h1>
+<h4 class="text-center">@Model.GameName</h4>
+<button class="offset-5 col-md-2" asp-action="Apply" asp-route-id="@Model.Id">Apply</button>
+<ul>
+    @foreach (var player in Model.Members)
+    {
+        <li>@player.Username</li>
+    }
+</ul>
+

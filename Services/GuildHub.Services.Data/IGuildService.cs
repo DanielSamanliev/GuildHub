@@ -13,5 +13,7 @@
         ICollection<ListGuildInfo> GetUserGuilds(string userId);
 
         ICollection<ListGuildInfo> GetPublicGuilds();
+
+        T GetById<T>(int id);
     }
 }

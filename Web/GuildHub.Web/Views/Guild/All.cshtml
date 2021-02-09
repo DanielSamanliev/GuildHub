@@ -1,0 +1,33 @@
+﻿@model GuildHub.Web.ViewModels.Guild.GuildIndexModel
+@{ 
+    ViewData["Title"] = "Guilds";
+}
+
+<h1 class="text-center">@this.ViewData["Title"]</h1>
+<div>
+    @if (Model.UserGuilds.Count > 0)
+    {
+        <ul aria-label="Your Guilds" style="font-size:45px" class="list-group">
+
+            @foreach (var guild in Model.UserGuilds)
+            {
+                <li><p style="font-size:20px">@guild.GuildName</p></li>
+                <li><h4>@guild.GuildDecription</h4></li>
+                <li></li>
+            }
+        </ul>
+    }
+    <ul aria-label="Public Guilds" class="list-group">
+        @foreach (var guild in Model.PublicGuilds)
+        {
+            <li><h2>@guild.GuildName</h2></li>
+            <li><h4>@guild.GuildDecription</h4></li>
+        }
+    </ul>
+</div>
+
+@section Scripts {
+    <script>
+        
+    </script>
+}

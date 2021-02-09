@@ -8,6 +8,7 @@
     using GuildHub.Data.Common.Repositories;
     using GuildHub.Data.Models;
     using GuildHub.Data.Models.Enums;
+    using GuildHub.Services.Mapping;
     using GuildHub.Web.ViewModels.Game;
     using GuildHub.Web.ViewModels.Guild;
     using GuildHub.Web.ViewModels.Image;
@@ -100,23 +101,32 @@
 
         public async Task ApplyForGuildAsync(GuildApplicationInputModel input)
         {
-            if (this.applicsRepo.AllAsNoTracking().Any(x => x.UserId == input.UserId || x.GuildId == input.GuildId))
+            if (this.applicsRepo.AllAsNoTracking().Any(x => x.UserId == input.UserId || x.GuildId == input.Id))
             {
                 return;
             }
 
-            var guild = this.guildRepo.AllAsNoTracking().FirstOrDefault(x => x.Id == input.GuildId);
+            var guild = this.guildRepo.AllAsNoTracking().FirstOrDefault(x => x.Id == input.Id);
 
             var application = new GuildApplication()
             {
                 UserId = input.UserId,
-                GuildId = input.GuildId,
-                Message = input.Message,
+                GuildId = input.Id,
+                Message = input.ApplicationTemplate,
                 Status = GuildAppStatus.Pending,
             };
 
             await this.applicsRepo.AddAsync(application);
             await this.applicsRepo.SaveChangesAsync();
+        }
+
+        public T GetById<T>(int id)
+        {
+            var guild = this.guildRepo.AllAsNoTracking()
+                .Where(x => x.Id == id)
+                .To<T>().FirstOrDefault();
+
+            return guild;
         }
     }
 }
