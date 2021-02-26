@@ -15,5 +15,9 @@
         ICollection<ListGuildInfo> GetPublicGuilds();
 
         T GetById<T>(int id);
+
+        public ICollection<T> GetGuildApplicationsGuild<T>(int guildId);
+
+        public Task Accept(string userId, int guildId);
     }
 }

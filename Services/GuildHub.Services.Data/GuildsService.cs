@@ -19,6 +19,7 @@
         private IDeletableEntityRepository<Guild> guildRepo;
         private IDeletableEntityRepository<Image> imagesRepo;
         private IRepository<GuildApplication> applicsRepo;
+        private IRepository<UserGuild> membersRepo;
 
         public GuildsService(
             IDeletableEntityRepository<Guild> guildRepo,
@@ -127,6 +128,30 @@
                 .To<T>().FirstOrDefault();
 
             return guild;
+        }
+
+        public async Task Accept(string userId, int guildId)
+        {
+            await this.membersRepo.AddAsync(new UserGuild
+            {
+                GuildId = guildId,
+                UserId = userId,
+            });
+            await this.membersRepo.SaveChangesAsync();
+
+            var application = this.applicsRepo.All().FirstOrDefault(x => x.UserId == userId && x.GuildId == guildId);
+            this.applicsRepo.Delete(application);
+            await this.applicsRepo.SaveChangesAsync();
+        }
+
+        public ICollection<T> GetGuildApplicationsGuild<T>(int guildId)
+        {
+            T[] applications = this.applicsRepo.AllAsNoTracking()
+                .Where(x => x.GuildId == guildId)
+                .To<T>()
+                .ToArray();
+
+            return applications;
         }
     }
 }
